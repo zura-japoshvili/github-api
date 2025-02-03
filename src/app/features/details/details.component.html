@@ -1,0 +1,131 @@
+<div class="min-h-screen bg-gradient-to-b from-background to-secondary/20 px-4 py-8 md:px-8">
+  <div class="mx-auto max-w-4xl">
+    <button (click)="goBack()" class="group mb-8 flex items-center gap-2 hover:bg-background/50">
+      <mat-icon class="h-4 w-4">arrow_back</mat-icon>
+      Back to Search
+    </button>
+
+    <mat-card class="overflow-hidden backdrop-blur-sm">
+      <div class="animate-scale-in border-b bg-card p-6 shadow-sm">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <mat-card-avatar class="h-16 w-16 rounded-lg border">
+              <img
+                [src]="repository?.owner?.avatar_url"
+                [alt]="repository?.owner?.login"
+                class="aspect-square h-full w-full"
+              />
+            </mat-card-avatar>
+            <div>
+              <!-- Repository name -->
+              <h1 class="text-2xl font-semibold tracking-tight md:text-3xl">{{ repository?.name }}</h1>
+
+              <!-- Language -->
+              <p class="mt-2 text-sm text-muted-foreground bg-gray-200 rounded-full px-4 py-2">
+                Language: <span *ngIf="repository?.language" class="bg-blue-500 text-white rounded-full px-2 py-1">{{ repository?.language }}</span>
+              </p>
+
+              <!-- Owner's login -->
+              <p class="mt-1 text-sm text-muted-foreground">
+                by {{ repository?.owner?.login }}
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button mat-button color="primary" (click)="openGitHub()">
+              View on GitHub
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6 p-6">
+        <div class="animate-fade-in [animation-delay:200ms]">
+          <h2 class="text-lg font-medium">About</h2>
+          <p class="mt-2 text-sm text-muted-foreground">{{ repository?.description }}</p>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="animate-fade-in grid grid-cols-2 gap-4 md:grid-cols-4 [animation-delay:400ms]">
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-yellow-500">star</mat-icon>
+            <div>
+              <p class="text-sm font-medium">Stars</p>
+              <p class="text-2xl font-semibold">{{ repository?.watchers | number }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-green-500">fork_left</mat-icon>
+            <div>
+              <p class="text-sm font-medium">Forks</p>
+              <p class="text-2xl font-semibold">{{ repository?.forks | number }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-blue-500">visibility</mat-icon>
+            <div>
+              <p class="text-sm font-medium">Watchers</p>
+              <p class="text-2xl font-semibold">{{ repository?.subscribers_count | number }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-gray-500">book</mat-icon>
+            <div>
+              <p class="text-sm font-medium">License</p>
+              <p class="text-2xl font-semibold">{{ repository?.license?.name }}</p>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="animate-fade-in grid gap-4 md:grid-cols-2 [animation-delay:600ms]">
+          <div>
+            <h2 class="mb-3 text-lg font-medium">Repository Info</h2>
+            <div class="space-y-2 text-sm">
+              <p><strong>Default Branch:</strong> {{ repository?.default_branch }}</p>
+              <p><strong>Size:</strong> {{ repository?.size }}</p>
+              <p><strong>Visibility:</strong> {{ repository?.visibility }}</p>
+              <p><strong>Open Issues:</strong> {{ repository?.open_issues }}</p>
+              <p><strong>Features:</strong>
+                <span *ngIf="repository?.hasWiki">Wiki,</span>
+                <span *ngIf="repository?.hasPages">GitHub Pages,</span>
+                <span *ngIf="repository?.archived">Archived</span>
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <h2 class="mb-3 text-lg font-medium">Topics</h2>
+            <div class="flex flex-wrap gap-2">
+              <mat-chip-list>
+                <mat-chip *ngFor="let topic of repository?.topics" [selected]="true">{{ topic }}</mat-chip>
+              </mat-chip-list>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="space-y-6 p-6">
+          <!-- About Section -->
+          <div class="animate-fade-in [animation-delay:200ms]">
+            <h2 class="text-lg font-medium">Description</h2>
+
+            <!-- Description Box -->
+            <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+              <p class="text-sm text-muted-foreground">{{ repository?.description || 'No description available.' }}</p>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+        </div>
+
+        <div class="animate-fade-in text-sm text-muted-foreground [animation-delay:1000ms]">
+          Last updated: {{ repository?.updated_at | date: 'shortDate' }}
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

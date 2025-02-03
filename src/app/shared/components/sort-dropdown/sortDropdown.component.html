@@ -1,0 +1,24 @@
+<div class="flex items-center bg-gray-50 border border-gray-200 rounded-lg p-3 mt-4 sm:mt-0 sm:ml-4">
+  <span class="text-gray-600 text-sm mr-3">Sort By</span>
+
+  <!-- Sort Dropdown -->
+  <select
+    [(ngModel)]="sortField"
+    (change)="onSortFieldChange($event)"
+    class="px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none mr-4"
+  >
+  <ng-container *ngFor="let column of columns">
+    <option *ngIf="column.sort !== null" [value]="column.sort">{{ column.label }}</option>
+  </ng-container>  </select>
+
+  <!-- Sort Order Toggle -->
+  <button
+    class="p-2 rounded-lg transition-all duration-200 ease-in-out"
+    [ngClass]="{
+      'bg-blue-500 text-white shadow-lg': sortOrder === 'asc',
+      'bg-white text-gray-500 hover:bg-gray-100': sortOrder === 'desc'
+    }"
+    (click)="toggleSortOrder()">
+    <mat-icon>{{ sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+  </button>
+</div>

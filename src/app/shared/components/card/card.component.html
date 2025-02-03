@@ -1,0 +1,47 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div
+    *ngFor="let repo of dataSource"
+    (click)="onCardClick(repo)"
+    class="bg-white/80 backdrop-blur-md border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all cursor-pointer"
+  >
+    <!-- Repository Header -->
+    <div class="flex items-center gap-4 mb-4">
+      <img
+        [src]="getFieldValue(repo, 'owner.avatar_url')"
+        [alt]="getFieldValue(repo, 'owner.login')"
+        class="w-12 h-12 rounded-full border border-gray-100"
+      />
+      <div class="overflow-hidden">
+        <h3 class="font-semibold text-gray-900 truncate">{{ getFieldValue(repo, 'name') }}</h3>
+        <p class="text-sm text-gray-500 truncate">{{ getFieldValue(repo, 'owner.login') }}</p>
+      </div>
+    </div>
+    <!-- Repository Description -->
+    <p class="text-gray-600 mb-4 line-clamp-2 text-sm">
+      {{ getFieldValue(repo, 'description') || 'No description available' }}
+    </p>
+    <!-- Repository Stats -->
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-1 text-gray-500">
+        <mat-icon class="text-lg">star</mat-icon>
+        <span class="text-sm">{{ getFieldValue(repo, 'stargazers_count') | number }}</span>
+      </div>
+      <div class="flex items-center gap-1 text-gray-500">
+        <mat-icon class="text-lg">fork_right</mat-icon>
+        <span class="text-sm">{{ getFieldValue(repo, 'forks_count') | number }}</span>
+      </div>
+      <div class="flex items-center gap-1 text-gray-500">
+        <mat-icon class="text-lg">visibility</mat-icon>
+        <span class="text-sm">{{ getFieldValue(repo, 'watchers_count') | number }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-paginator
+  [length]="totalItems"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex - 1"
+  (page)="changePage($event.pageIndex + 1)">
+</mat-paginator>
+

@@ -1,0 +1,87 @@
+<div class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-6">
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur-md shadow-lg rounded-lg p-4 mb-6">
+    <h1 class="text-lg font-semibold text-gray-800">GitHub Repo Search</h1>
+  </header>
+  <div class="flex flex-col sm:flex-row justify-between items-center bg-white/90 backdrop-blur-md p-6 shadow-md rounded-lg">
+    <!-- Search Input -->
+    <div class="w-full sm:w-2/3 relative">
+      <input
+        type="text"
+        placeholder="Search GitHub Repositories"
+        [(ngModel)]="query.search"
+        (ngModelChange)="onSearchChange()"
+        class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+      />
+      <mat-icon class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
+    </div>
+
+    <!-- Sort Dropdown -->
+    <app-sort-dropdown
+    [columns]="columns"
+    [sortField]="query.sortField"
+    [sortOrder]="query.sortOrder"
+    (sortFieldChange)="onSortFieldChange($event)"
+    (sortOrderChange)="onSortOrderChange($event)"
+  ></app-sort-dropdown>
+
+    <!-- View Mode Toggle -->
+    <div class="flex flex-col items-center bg-gray-50 border border-gray-200 rounded-lg p-3 mt-4 sm:mt-0 sm:ml-4">
+      <span class="text-gray-600 text-sm mb-2">View Mode</span>
+      <div class="flex space-x-2">
+        <button
+          class="p-2 rounded-lg transition-all duration-200 ease-in-out"
+          [ngClass]="{
+            'bg-blue-500 text-white shadow-lg': viewMode === 'table',
+            'bg-white text-gray-500 hover:bg-gray-100': viewMode !== 'table'
+          }"
+          (click)="onViewModeChange('table')">
+          <mat-icon>table_chart</mat-icon>
+        </button>
+        <button
+          class="p-2 rounded-lg transition-all duration-200 ease-in-out"
+          [ngClass]="{
+            'bg-blue-500 text-white shadow-lg': viewMode === 'card',
+            'bg-white text-gray-500 hover:bg-gray-100': viewMode !== 'card'
+          }"
+          (click)="onViewModeChange('card')">
+          <mat-icon>grid_view</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+<!-- Repo List -->
+<div *ngIf="dataSource$ | async as data; else notFound" class="mt-6 bg-white/90 backdrop-blur-md shadow-md rounded-lg p-6">
+  <!-- Show Table or Card View if there are results -->
+  <ng-container *ngIf="data?.total_count">
+    <app-table
+      *ngIf="viewMode === 'table'"
+      [dataSource]="data.items"
+      [columns]="columns"
+      [pageIndex]="query.pageIndex"
+      [pageSize]="query.pageSize"
+      [totalItems]="data.total_count"
+      (rowClick)="onRepoSelect($event)"
+      (pageChange)="onPageChange($event)">
+    </app-table>
+
+    <app-card
+      *ngIf="viewMode === 'card'"
+      [dataSource]="data.items"
+      [columns]="columns"
+      [pageIndex]="query.pageIndex"
+      [pageSize]="query.pageSize"
+      [totalItems]="data.total_count"
+      (cardClick)="onRepoSelect($event)"
+      (pageChange)="onPageChange($event)">
+    </app-card>
+  </ng-container>
+</div>
+  <!-- Not Found Message -->
+  <ng-template #notFound>
+    <div class="text-center text-gray-500 mt-4">
+      <p class="text-lg font-semibold">No repositories found</p>
+      <p class="text-sm">Try adjusting your search or filters.</p>
+    </div>
+  </ng-template>
+</div>
